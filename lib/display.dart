@@ -27,6 +27,7 @@ class _DisplayPageState extends State<DisplayPage> {
     super.initState();
     getvalue();
     fetchdata();
+    getData();
   }
 
   void getvalue() async {
@@ -36,14 +37,21 @@ class _DisplayPageState extends State<DisplayPage> {
     });
   }
 
+  void getData() {
+    setState(() {
+      description = Get.arguments["desc"];
+      review = Get.arguments["review"];
+    });
+  }
+
   void fetchdata() async {
     final data = await dbHandler().fetchData(barcode);
     setState(() {
       productName = data['productNameValue'];
       manufacturer = data['manufacturingPlantValue'];
       dimensions = data['productDiminsionValue'];
-      description = data['Description'];
-      review = data['Review'];
+      // description = data['Description'];
+      // review = data['Review'];
     });
   }
 

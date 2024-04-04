@@ -241,6 +241,8 @@ class _editPageState extends State<editPage> {
                             });
                             Get.to(() => DisplayPage(), arguments: {
                               "barcode": barcode,
+                              "desc":description.text.toString(),
+                              "review":review.text.toString(),
                             });
                             //     arguments: {"username": Get.arguments["username"]});
                           }
