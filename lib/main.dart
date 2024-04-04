@@ -38,7 +38,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController companyid = TextEditingController();
+  TextEditingController companyId = TextEditingController();
   TextEditingController username = TextEditingController();
   TextEditingController passwordTc = TextEditingController();
   bool visible = true;
@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
   login() async {
     // Login Funtion
     var response = await dbHandler().getUserAuth(dbModel(
-        companyId: companyid.text,
+        companyId: companyId.text,
         username: username.text,
         password: passwordTc.text));
     if (response == true) {
@@ -123,7 +123,7 @@ class _LoginState extends State<Login> {
                             height: 60,
                           ),
                           TextFormField(
-                            controller: companyid,
+                            controller: companyId,
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.account_circle),
                               labelText: 'CompanyId',
@@ -233,8 +233,8 @@ class _LoginState extends State<Login> {
                                   });
                                   final user = username.text.trim();
                                   final password = passwordTc.text.trim();
-                                  final id = companyid.text.trim();
-                                  checkUserType = companyid.text.trim();
+                                  final id = companyId.text.trim();
+                                  checkUserType = companyId.text.trim();
                                   sp.setBool('login_flag', false);
                                   sp.setString("username", user);
                                   login();
@@ -304,7 +304,7 @@ class _LoginState extends State<Login> {
 
   void dispose() {
     username.dispose();
-    companyid.dispose();
+    companyId.dispose();
     passwordTc.dispose();
     super.dispose();
   }

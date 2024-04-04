@@ -13,7 +13,7 @@ class _createUserState extends State<createUser> {
   TextEditingController companyIdController = TextEditingController();
   TextEditingController userIdController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  var valu1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
