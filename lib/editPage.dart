@@ -230,20 +230,20 @@ class _editPageState extends State<editPage> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                              await dbHandler()
-                                  .updateproduct(
-                                barcode,
-                                description!.text,
-                                review!.text,
-                              )
-                                  .then((value) {
-                                // Handle the result if needed
-                              });
-                              Get.to(() => DisplayPage(), arguments: {
-                                "barcode": barcode,
-                              });
-                              //     arguments: {"username": Get.arguments["username"]});
-                            }
+                            await dbHandler()
+                                .updateproduct(
+                              barcode,
+                              description!.text,
+                              review!.text,
+                            )
+                                .then((value) {
+                              // Handle the result if needed
+                            });
+                            Get.to(() => DisplayPage(), arguments: {
+                              "barcode": barcode,
+                            });
+                            //     arguments: {"username": Get.arguments["username"]});
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors

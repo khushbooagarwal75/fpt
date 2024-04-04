@@ -187,13 +187,17 @@ class _DisplayPageState extends State<DisplayPage> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              description != null?Text(
-                                'Description:',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ):SizedBox(height: 0,),
+                              description != null
+                                  ? Text(
+                                      'Description:',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 0,
+                                    ),
                               SizedBox(height: 5.0),
                               Text(
                                 description!,
@@ -206,27 +210,27 @@ class _DisplayPageState extends State<DisplayPage> {
                         : SizedBox(height: 16.0),
                     SizedBox(height: 16.0),
                     review == null
-                        ?  SizedBox(
-                      height: 0,
-                    )
-                        :Column(
-                      children: [
-                        Text(
-                          'Review:',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        Text(
-                          review!,
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ],
-                    )
+                        ? SizedBox(
+                            height: 0,
+                          )
+                        : Column(
+                            children: [
+                              Text(
+                                'Review:',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 5.0),
+                              Text(
+                                review!,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                            ],
+                          )
                   ],
                 ),
               ),

@@ -97,13 +97,13 @@ class _AddDataAdminState extends State<AddDataAdmin> {
                     onPressed: () async {
                       await dbHandler()
                           .insertData(dbModelAddInformation(
-                          barCodeNo: barCodeValue.trim(),
-                          productName: productName.text.trim(),
-                          manufacturingPlant:
-                          manufacturingPlant.text.trim(),
-                          productDiminsion: productDiminsion.text.trim(),
-                          Description: "null",
-                          Review: "null"))
+                              barCodeNo: barCodeValue.trim(),
+                              productName: productName.text.trim(),
+                              manufacturingPlant:
+                                  manufacturingPlant.text.trim(),
+                              productDiminsion: productDiminsion.text.trim(),
+                              Description: "null",
+                              Review: "null"))
                           .then((value) => {print("Inserted")})
                           .onError((error, stackTrace) => {print('$error')});
                     },

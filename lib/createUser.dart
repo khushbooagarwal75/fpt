@@ -17,11 +17,8 @@ class _createUserState extends State<createUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-
-
-        ),
-        body:  Column(
+        appBar: AppBar(),
+        body: Column(
           children: [
             Padding(
               padding: EdgeInsets.all(8.0),
@@ -60,10 +57,10 @@ class _createUserState extends State<createUser> {
                     await dbHandler()
                         .insertUserInfomation(dbModel(
 // id: ,
-                      companyId:companyIdController.text.trim(),
-                      username:userIdController.text.trim(),
-                      password:passwordController.text.trim(),
-                    ))
+                          companyId: companyIdController.text.trim(),
+                          username: userIdController.text.trim(),
+                          password: passwordController.text.trim(),
+                        ))
                         .then((value) => {print("Inserted")})
                         .onError((error, stackTrace) => {print('$error')});
                   },
@@ -81,7 +78,6 @@ class _createUserState extends State<createUser> {
             //       );
             //     },
             //     child: Text("Read")),
-
           ],
         ));
   }

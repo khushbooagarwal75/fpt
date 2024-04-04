@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
         username: username.text,
         password: passwordTc.text));
     if (response == true) {
-      if (checkUserType == 'x1234') {
+      if (checkUserType == 'x12345') {
         // Checking UserType Here
         Get.to(AdminScanner());
       } else {
