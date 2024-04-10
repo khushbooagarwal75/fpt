@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fpt/display.dart';
+import 'package:fpt/loginTry.dart';
 import 'package:fpt/model/db_handler.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class editPage extends StatefulWidget {
   const editPage({super.key});
@@ -11,25 +13,81 @@ class editPage extends StatefulWidget {
 }
 
 class _editPageState extends State<editPage> {
+  late SharedPreferences spget;
+  late String? stname;
+  String? role;
   TextEditingController description = TextEditingController();
   TextEditingController review = TextEditingController();
   String barcode = Get.arguments['barcode'];
   final _formKey = GlobalKey<FormState>();
   String? productname, manufacturer, dimensions;
 
-  void fetchdata() async {
-    final data = await dbHandler().fetchData(barcode);
+  var ScanValue;
+  var barCodeValue;
+  var updateId;
+  var userCompanyID;
+
+  // void fetchdata() async {
+  //   final data = await dbHandler().fetchData(barcode);
+  //   setState(() {
+  //     productname = data['productNameValue'];
+  //     manufacturer = data['manufacturingPlantValue'];
+  //     dimensions = data['productDiminsionValue'];
+  //   });
+  // }
+  void getvalue() async {
+    spget = await SharedPreferences.getInstance();
     setState(() {
-      productname = data['productNameValue'];
-      manufacturer = data['manufacturingPlantValue'];
-      dimensions = data['productDiminsionValue'];
+      stname = spget.getString("username");
+    });
+  }
+
+  checkuserid() async {
+    SharedPreferences sharedPref = await SharedPreferences.getInstance();
+    userCompanyID = sharedPref.getString('companyid');
+  }
+
+  void getuserrole() async {
+    spget = await SharedPreferences.getInstance();
+    setState(() {
+      role = spget.getString('role');
+      stname = spget.getString("username");
+    });
+  }
+
+  void getdata() async {
+    await dbHandler().fetchdataProduct(barcode).then(
+      (value) {
+        setState(() {
+          checkuserid();
+          ScanValue = value;
+          updateId = ScanValue != null ? ScanValue[0]['id'] ?? '' : '';
+          productname =
+              ScanValue != null ? ScanValue[0]['productName'] ?? '' : '';
+          manufacturer =
+              ScanValue != null ? ScanValue[0]['manufacturingPlant'] ?? '' : '';
+          dimensions =
+              ScanValue != null ? ScanValue[0]['productDiminsion'] ?? '' : '';
+          description = TextEditingController(
+              text: ScanValue != null
+                  ? ScanValue[0]['productionDescription'] ?? ''
+                  : ' ');
+          review = TextEditingController(
+              text: ScanValue != null
+                  ? ScanValue[0]['productionReview'] ?? ''
+                  : ' ');
+        });
+      },
+    ).onError((error, stackTrace) {
+      print(error);
     });
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    fetchdata();
+    getvalue();
+    getdata();
     super.initState();
   }
 
@@ -39,24 +97,43 @@ class _editPageState extends State<editPage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
         child: AppBar(
-          backgroundColor: Colors.cyan,
+          backgroundColor: Colors.cyan.shade900,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(30),
             ),
           ),
-          title: Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Text(
-              'Finished Part Transfer',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1),
-            ),
+          title: Text(
+            'Finished Part Transfer',
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1),
           ),
+          automaticallyImplyLeading: false,
           centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                stname!,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                spget.setBool('login_flag', true);
+                dispose();
+                Get.off(() => TryLogin());
+              },
+              icon: Icon(
+                Icons.logout,
+                color: Colors.black,
+                size: 27,
+              ),
+            )
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -176,7 +253,7 @@ class _editPageState extends State<editPage> {
                             suffixIcon: Icon(Icons.feedback),
                             labelText: 'Description',
                             labelStyle: TextStyle(
-                                color: Colors.cyan[600],
+                                color: Colors.cyan[900],
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
                             focusedBorder: OutlineInputBorder(
@@ -205,7 +282,7 @@ class _editPageState extends State<editPage> {
                             suffixIcon: Icon(Icons.account_box),
                             labelText: 'Review',
                             labelStyle: TextStyle(
-                                color: Colors.cyan[600],
+                                color: Colors.cyan[900],
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
                             focusedBorder: OutlineInputBorder(
@@ -231,31 +308,30 @@ class _editPageState extends State<editPage> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             await dbHandler()
-                                .updateproduct(
-                              barcode,
-                              description!.text,
-                              review!.text,
-                            )
+                                .updateproduct(updateId, description!.text,
+                                    review!.text, userCompanyID)
                                 .then((value) {
                               // Handle the result if needed
                             });
-                            Get.to(() => DisplayPage(), arguments: {
+                            Get.off(() => DisplayPage(), arguments: {
                               "barcode": barcode,
-                              "desc":description.text.toString(),
-                              "review":review.text.toString(),
+                              "desc": description.text.toString(),
+                              "review": review.text.toString(),
                             });
                             //     arguments: {"username": Get.arguments["username"]});
                           }
+                          style:
+                          ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.cyan.shade900.withOpacity(0.5),
+                            // Change the button color here
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors
-                              .cyan.shade300, // Change the button color here
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 40, vertical: 7),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
                         child: Text(
                           'Save',
                           style: TextStyle(

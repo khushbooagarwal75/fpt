@@ -1,9 +1,10 @@
+
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:fpt/model/db_handler.dart';
-import 'package:fpt/model/dbModelAddTnformation.dart';
 import 'package:fpt/admin.dart';
+import 'package:fpt/model/dbModelAddTnformation.dart';
+import 'package:fpt/model/db_handler.dart';
 import 'package:get/get.dart';
 
 class AddDataAdmin extends StatefulWidget {
@@ -14,11 +15,14 @@ class AddDataAdmin extends StatefulWidget {
 }
 
 class _AddDataAdminState extends State<AddDataAdmin> {
+  TextEditingController productId = TextEditingController();
+
   TextEditingController productName = TextEditingController();
   TextEditingController manufacturingPlant = TextEditingController();
   TextEditingController productDiminsion = TextEditingController();
-  //   TextEditingController Description = TextEditingController();
-  // TextEditingController Review = TextEditingController();
+  TextEditingController productionDescription = TextEditingController();
+  TextEditingController productionReview = TextEditingController();
+
 
   var barCodeValue = Get.arguments[0]['codevalue'];
   @override
@@ -49,6 +53,17 @@ class _AddDataAdminState extends State<AddDataAdmin> {
                 child: TextField(
                   readOnly: true,
                   controller: TextEditingController(text: barCodeValue),
+                  // obscureText: true,s
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'BarCode no',
+                  ),
+                ),
+              ),   Padding(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  // readOnly: true,s
+                  controller:productId,
                   // obscureText: true,s
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -97,13 +112,12 @@ class _AddDataAdminState extends State<AddDataAdmin> {
                     onPressed: () async {
                       await dbHandler()
                           .insertData(dbModelAddInformation(
-                              barCodeNo: barCodeValue.trim(),
-                              productName: productName.text.trim(),
-                              manufacturingPlant:
-                                  manufacturingPlant.text.trim(),
-                              productDiminsion: productDiminsion.text.trim(),
-                              Description: "null",
-                              Review: "null"))
+                        barCodeNo: barCodeValue.trim(),
+                        productName: productName.text.trim(),
+                        manufacturingPlant:
+                        manufacturingPlant.text.trim(),
+                        productDiminsion: productDiminsion.text.trim(),
+                      ))
                           .then((value) => {print("Inserted")})
                           .onError((error, stackTrace) => {print('$error')});
                     },
