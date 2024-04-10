@@ -42,6 +42,7 @@ class _DisplayPageState extends State<DisplayPage> {
   String? CheckByUser_QA;
   String? userCompanyID;
   var updateId;
+  TextEditingController deniedProduct=TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -406,7 +407,102 @@ class _DisplayPageState extends State<DisplayPage> {
                                   showModalBottomSheet(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return BottomForm();
+                                      return  Container(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Column(
+                                              children: [
+                                                SizedBox(height: 10,),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 0),
+                                                  child: TextFormField(
+                                                    controller: deniedProduct,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      suffixIcon: Icon(Icons.feedback),
+                                                      labelText: 'Remark',
+                                                      labelStyle: TextStyle(
+                                                          color: Colors.cyan[900],
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                        borderSide: BorderSide(
+                                                            color: Colors.black87, width: 3),
+                                                      ),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(20),
+                                                        borderSide: BorderSide(
+                                                          color: Colors.black87,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    validator: (value) {
+                                                      if (value == null || value.isEmpty) {
+                                                        return 'Please enter  CompanyId';
+                                                      }
+                                                      return null;
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10,),
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 0),
+                                                  child: SizedBox(
+                                                    width: double.infinity,
+                                                    child: ElevatedButton(
+                                                      onPressed: () async {
+
+                                                        var connectivityResult = await Connectivity().checkConnectivity();
+                                                        if (connectivityResult == ConnectivityResult.none) {
+                                                          // No internet connection
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) => AlertDialog(
+                                                              title: Text('No Internet Connection'),
+                                                              content: Text('Please check your internet connection.'),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  onPressed: () => Navigator.pop(context),
+                                                                  child: Text('OK'),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          // _launchEmail();
+                                                          Send_mail();
+
+                                                        }
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                        backgroundColor: Colors.cyan.shade900.withOpacity(
+                                                            0.5), // Change the button color here
+                                                        padding: EdgeInsets.symmetric(
+                                                            horizontal: 0, vertical: 5),
+                                                        shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                      ),
+                                                      child:Text(
+                                                        'Submit',
+                                                        style: TextStyle(
+                                                          fontSize: 25,
+                                                          letterSpacing: 0.5,
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                     },
                                   );
                                 },
@@ -433,6 +529,7 @@ class _DisplayPageState extends State<DisplayPage> {
                           ),
                         ],
                       ):SizedBox(height: 0,),
+
                     ],
                   ),
                 ),
@@ -443,7 +540,7 @@ class _DisplayPageState extends State<DisplayPage> {
       ),
     );
   }
-  void Send_mail(String remark) {
+  void Send_mail() {
     var Service_id = 'service_wv0fuqf',
         Template_id = 'template_cnk3plf',
         User_id = 'Fi_N4AtsfrugumPNL';
@@ -484,110 +581,4 @@ class _DisplayPageState extends State<DisplayPage> {
 
   }
 
-}
-
-
-
-class BottomForm extends StatelessWidget {
-  TextEditingController deniedProduct=TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            children: [
-              SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 0),
-                child: TextFormField(
-                  controller: deniedProduct,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    suffixIcon: Icon(Icons.feedback),
-                    labelText: 'Remark',
-                    labelStyle: TextStyle(
-                        color: Colors.cyan[900],
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                          color: Colors.black87, width: 3),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter  CompanyId';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-
-                        var connectivityResult = await Connectivity().checkConnectivity();
-                        if (connectivityResult == ConnectivityResult.none) {
-                          // No internet connection
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: Text('No Internet Connection'),
-                              content: Text('Please check your internet connection.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          // _launchEmail();
-                          Send_mail(deniedProduct.text.toString());
-
-                        }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.cyan.shade900.withOpacity(
-                          0.5), // Change the button color here
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child:Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 25,
-                        letterSpacing: 0.5,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-
-  }
 }
